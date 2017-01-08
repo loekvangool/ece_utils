@@ -1,4 +1,4 @@
-#!/bin/bash                                                                                                                                                              
+#!/bin/bash
 #
 #   Install depedencies for Elastic Cloud Enterprise.
 #
@@ -90,7 +90,7 @@ root             soft    memlock        unlimited
 LIMITS
 fi
 
-sudo mount $DATA_SIR
+sudo mount $DATA_DIR
 sudo chown $USER:$USER /mnt/data
 sudo install -d -m 700 /mnt/data/docker
 
@@ -101,9 +101,7 @@ else
 fi
 
 sudo service docker restart
-
 sudo usermod -aG docker $USER
-
 
 if [ ! -f /etc/sysctl.d/70-cloudenterprise.conf ]; then
         cat << SETTINGS | sudo tee /etc/sysctl.d/70-cloudenterprise.conf
@@ -114,7 +112,6 @@ SETTINGS
 fi
 
 python -c "for i in range(10000,30000): print '{0}:{0}'.format(i)" | sudo tee /etc/projid > /dev/null
-
 # To seed entropy for the install script token generation. Will be removed with move the /dev/urandom happens.
 sudo apt-get install haveged -y
 
