@@ -7,6 +7,8 @@ CLOUD_ENTERPRISE_VERSION=1.0.0-alpha4
 ENABLE_DEBUG_LOGGING=false
 OVERWRITE_EXISTING_IMAGE=false
 
+echo $@
+
 while [ "$1" != "" ]; do
   echo $1
   echo $2
