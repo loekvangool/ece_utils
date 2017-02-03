@@ -8,6 +8,8 @@ ENABLE_DEBUG_LOGGING=false
 OVERWRITE_EXISTING_IMAGE=false
 
 while [ "$1" != "" ]; do
+  echo $1
+  echo $2
   case $1 in
     --coordinator-host )            shift
                                     COORDINATOR_HOST=$1
