@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #    Install dependencies for Elastic Cloud Enterprise
-#    AWS Edition - CentOS 7 - ECE version: alpha4
+#    Bluemix/SoftLayer Edition - CentOS 7 - ECE version: alpha4
 #    Based on https://www.elastic.co/guide/en/cloud-enterprise/current/ece-configuring.html
 
 # Step 0 -- user creation
@@ -16,6 +16,7 @@ if [[ $USER != "centos" ]]; then
   exit 1
 fi
 
+# Update OS & kernel
 sudo yum makecache fast && sudo yum update -y
 sudo sysctl -w vm.max_map_count=262144
 sudo yum install nano -y
@@ -26,22 +27,16 @@ sudo awk -F\' '$1=="menuentry " {print $2}' /etc/grub2.cfg;
 sudo grub2-set-default 0;
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg;
 
-sudo file -s /dev/xvdb
-sudo mkfs.xfs /dev/xvdb
-sudo install -d -m 700 /mnt/data
-echo | sudo tee -a /etc/fstab
-echo "/dev/xvdb     /mnt/data/   xfs     defaults,pquota,prjquota  0 0" | sudo tee -a /etc/fstab
-sudo mount -a
-sudo mkdir -p /mnt/data/elastic
-sudo chown -R centos:centos /mnt/data/
+# Create data directory
+sudo install -d -m 700 /data
+sudo chown -R centos:centos /data
 
+# Install & test docker
 sudo yum remove docker-engine -y && sudo yum install -y yum-utils;
 sudo yum-config-manager --add-repo https://docs.docker.com/engine/installation/linux/repo_files/centos/docker.repo;
 sudo yum makecache fast && sudo yum -y install docker-engine-1.11.2;
-sudo service docker stop; sudo service docker start
+sudo systemctl stop docker; sudo systemctl start docker
 sudo docker run hello-world
-
-sudo systemctl stop iptables
 
 # Step 1
 sudo systemctl stop docker
@@ -74,20 +69,20 @@ echo "root             hard    nofile         1024000" | sudo tee -a /etc/securi
 echo "root             soft    memlock        unlimited" | sudo tee -a /etc/security/limits.conf
 
 # Step 8
-sudo install -d -m 700 /mnt/data/docker
+sudo install -d -m 700 /data/docker
 
 # Step 9-11
 sudo mkdir -p /etc/systemd/system/docker.service.d/
 echo "[Service]" | sudo tee /etc/systemd/system/docker.service.d/docker.conf
 echo "ExecStart=" | sudo tee -a /etc/systemd/system/docker.service.d/docker.conf
-echo "ExecStart=/usr/bin/docker daemon -H fd:// -g /mnt/data/docker -s devicemapper --storage-opt dm.fs=xfs" | sudo tee -a /etc/systemd/system/docker.service.d/docker.conf
+echo "ExecStart=/usr/bin/docker daemon -H fd:// -g /data/docker -s devicemapper" | sudo tee -a /etc/systemd/system/docker.service.d/docker.conf
 sudo systemctl daemon-reload; sudo systemctl restart docker
 
 # Step 12
 sudo systemctl enable docker
 
 # Step 13
-sudo usermod -aG docker $USER
+sudo usermod -aG docker centos
 
 # Step 14
 cat << SETTINGS | sudo tee /etc/sysctl.d/70-cloudenterprise.conf
