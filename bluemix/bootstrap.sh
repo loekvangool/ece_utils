@@ -18,7 +18,7 @@ fi
 
 # Update OS & kernel
 sudo yum makecache fast && sudo yum update -y
-sudo yum install nano htop -y
+sudo yum install nano -y
 sudo rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org;
 sudo rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm;
 sudo yum --enablerepo=elrepo-kernel install kernel-ml -y;
