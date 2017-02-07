@@ -9,6 +9,7 @@
 #passwd centos
 #echo 'centos  ALL=(ALL:ALL) ALL' >> /etc/sudoers
 #su centos
+#cd ~
 
 if [[ $USER != "centos" ]]; then 
   echo "This script must be run as user centos!" 
