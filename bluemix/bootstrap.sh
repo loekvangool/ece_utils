@@ -84,7 +84,7 @@ sudo install -d -m 700 /data/docker
 sudo mkdir -p /etc/systemd/system/docker.service.d/
 echo "[Service]" | sudo tee /etc/systemd/system/docker.service.d/docker.conf
 echo "ExecStart=" | sudo tee -a /etc/systemd/system/docker.service.d/docker.conf
-echo "ExecStart=/usr/bin/docker daemon -H fd:// -g /data/docker -s devicemapper" | sudo tee -a /etc/systemd/system/docker.service.d/docker.conf
+echo "ExecStart=/usr/bin/docker daemon -H fd:// -g /mnt/data/docker -s devicemapper --storage-opt dm.fs=xfs" | sudo tee -a /etc/systemd/system/docker.service.d/docker.conf
 sudo systemctl daemon-reload; sudo systemctl restart docker
 
 # Step 12
