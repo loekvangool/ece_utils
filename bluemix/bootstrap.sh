@@ -26,6 +26,16 @@ sudo awk -F\' '$1=="menuentry " {print $2}' /etc/grub2.cfg;
 sudo grub2-set-default 0;
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg;
 
+# Mount SAN
+sudo file -s /dev/xvdc
+sudo mkfs.xfs /dev/xvdc
+sudo install -d -m 700 /mnt/data
+echo | sudo tee -a /etc/fstab
+echo "/dev/xvdc     /mnt/data/   xfs     defaults,pquota,prjquota  0 0" | sudo tee -a /etc/fstab
+sudo mount -a
+sudo mkdir -p /mnt/data/elastic
+sudo chown -R centos:centos /mnt/data/
+
 # Create data directory
 sudo install -d -m 700 /data
 sudo chown -R centos:centos /data
