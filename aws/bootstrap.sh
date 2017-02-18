@@ -28,7 +28,7 @@ sudo chown -R centos:centos /mnt/data/
 
 sudo yum remove docker-engine -y && sudo yum install -y yum-utils;
 sudo yum-config-manager --add-repo https://docs.docker.com/engine/installation/linux/repo_files/centos/docker.repo;
-sudo yum makecache fast && sudo yum -y install docker-engine-1.11.2;
+sudo yum makecache fast && sudo yum -y install docker-engine-1.12.6;
 sudo service docker stop; sudo service docker start
 sudo docker run hello-world
 
