@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #    Install dependencies for Elastic Cloud Enterprise
-#    AWS Edition - CentOS 7 - ECE version: alpha4
+#    AWS Edition - CentOS 7 - ECE version: beta1
 #    Based on https://www.elastic.co/guide/en/cloud-enterprise/current/ece-configuring.html
 
 sudo yum makecache fast && sudo yum update -y
